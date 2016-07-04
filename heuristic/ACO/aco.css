@@ -1,0 +1,19 @@
+body{
+    margin: 0px;
+    padding: 0px;
+}
+#gridBg{
+    position: relative;
+    left: 0px;
+    top:0px;
+}
+.ant{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: #abc123;
+    -webkit-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}

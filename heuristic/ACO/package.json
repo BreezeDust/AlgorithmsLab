@@ -1,0 +1,22 @@
+{
+  "name": "aco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "aco.js",
+  "scripts": {
+     "dev": "webpack-dev-server --inline --hot --quiet",
+     "build": "webpack -p",
+     "test": "mocha"
+   },
+  "author": "BreezeDust",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.23.1",
+    "html-loader": "^0.4.3",
+    "style-loader": "^0.13.0",
+    "vue-loader": "^8.2.0",
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1",
+    "mocha": "^2.4.5"
+  }
+}
