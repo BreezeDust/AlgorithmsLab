@@ -3,11 +3,11 @@
  * @Date:   2016-07-04
  * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-04
+* @Last modified time: 2016-07-07
  */
  require("./lib/zepto.js");
  require("./lib/grid.js");
- 
+
 var Ant=require("./entity/Ant.js");
 var World=require("./entity/World.js");
 
@@ -22,7 +22,7 @@ var World=require("./entity/World.js");
         var opts = {
             distance: 20,
             lineWidth: 0.1,
-            gridColor: "#808080",
+            gridColor: "#fff",
             caption: false
         };
         new Grid(opts).draw(ctx);
@@ -33,5 +33,19 @@ var World=require("./entity/World.js");
     }
     initGridBg();
     var world=new World(window.innerWidth,window.innerHeight,20);
-    var ant=new Ant(world);
+    var antList=[];
+    function _run(){
+        if(antList.length<1){
+            antList.push(new Ant(world));
+        }
+        // console.log("---->");
+        for(var i=0;i<antList.length;i++){
+            antList[i].move();
+        }
+        setTimeout(function(){
+            _run();
+        },800);
+    }
+    _run();
+
 })();

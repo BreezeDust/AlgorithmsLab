@@ -1,6 +1,7 @@
 body{
     margin: 0px;
     padding: 0px;
+    background-color: #16a085;
 }
 #gridBg{
     position: relative;
@@ -9,11 +10,21 @@ body{
 }
 .ant{
     position: absolute;
-    left: 0px;
-    top: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    -webkit-transition: all 1s linear;
+    transition: all 1s linear;
+}
+.food{
+    position: absolute;
     width: 20px;
     height: 20px;
     background-color: #abc123;
-    -webkit-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+}
+.home{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #407D94;
 }
