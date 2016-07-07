@@ -3,7 +3,7 @@
  * @Date:   2016-07-04
  * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-07
+* @Last modified time: 2016-07-08
  */
  require("./lib/zepto.js");
  require("./lib/grid.js");
@@ -35,7 +35,7 @@ var World=require("./entity/World.js");
     var world=new World(window.innerWidth,window.innerHeight,20);
     var antList=[];
     function _run(){
-        if(antList.length<1){
+        if(antList.length<100){
             antList.push(new Ant(world));
         }
         // console.log("---->");

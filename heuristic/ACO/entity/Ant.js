@@ -3,7 +3,7 @@
 * @Date:   2016-07-04
 * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-07
+* @Last modified time: 2016-07-08
 */
 
 var World=require("./World.js");
@@ -21,7 +21,7 @@ function Ant(word){
 
     this._init();
 }
-
+Ant.testN=1;
 // 静态数据
 Ant.STATUS_FIND_FOOD=Position.P_TYPE_HOME;
 Ant.STATUS_CARRY_FOOD=Position.P_TYPE_FOOD;
@@ -52,7 +52,7 @@ Ant.prototype._init=function(){
     this.status=Ant.STATUS_FIND_FOOD;
 
     this.homePosition=this._word.map[parseInt(this._word.xl/2)][parseInt(this._word.yl/2)];
-    this._findPosition(this.homePosition);
+    this._findPosition(this.homePosition,true);
     this._addCheckList(this.homePosition);
 
     if(this.dom==null){
@@ -82,7 +82,7 @@ Ant.prototype._volatitlePheromone=function(){
     }
 }
 Ant.prototype._leavePheromone=function(position){
-    position.leavePheromone(this._getP(),Ant.STATUS_FIND_FOOD);
+    position.leavePheromone(this._getP(),this.status);
 }
 Ant.prototype._check=function(position){
     if(position==null){
@@ -128,7 +128,7 @@ Ant.prototype.move=function(){
         }
     }
 };
-Ant.prototype._findPosition=function(lastPosition){
+Ant.prototype._findPosition=function(lastPosition,isStart){
 
     // 探测信息素
     var findStatus=Ant.STATUS_CARRY_FOOD;
@@ -163,9 +163,14 @@ Ant.prototype._findPosition=function(lastPosition){
     }
 
     // 如果没有进行信息素选择
-    if(lastPosition==this.homePosition){
+    if(isStart){
         this.dp=Math.floor(Math.random()*Direction.M.length);
-        this.dp=Direction.getDP(Direction.U);
+        console.log("==",Ant.testN);
+        if(Ant.testN==0){
+            Ant.testN++;
+            console.log("===>","up");
+            this.dp=Direction.getDP(Direction.U);
+        }
     }
     // if(this.status==Ant.STATUS_CARRY_FOOD){
     //     // 向家的方向走
@@ -218,8 +223,8 @@ Ant.prototype._move=function(newPosition){
         homelogs+=tmp.getP(Position.P_TYPE_HOME).toFixed(2)+",";
         foodlogs+=tmp.getP(Position.P_TYPE_FOOD).toFixed(2)+",";
     }
-    console.log("home",homelogs);
-    // console.log("food",foodlogs);
+    // console.log("home",homelogs);
+    console.log("food",foodlogs);
 };
 
 module.exports=Ant;
