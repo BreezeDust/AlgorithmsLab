@@ -3,13 +3,14 @@
  * @Date:   2016-07-04
  * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-08
+* @Last modified time: 2016-07-09
  */
  require("./lib/zepto.js");
  require("./lib/grid.js");
 
 var Ant=require("./entity/Ant.js");
 var World=require("./entity/World.js");
+var Position=require("./entity/Position.js");
 
 
 (function() {
@@ -34,17 +35,26 @@ var World=require("./entity/World.js");
     initGridBg();
     var world=new World(window.innerWidth,window.innerHeight,20);
     var antList=[];
+    var isRun=false;
+    window.world=world;
     function _run(){
-        if(antList.length<100){
-            antList.push(new Ant(world));
+        if(!isRun){
+            isRun=true;
+            world.volatitlePheromone();
+            if(antList.length<100){
+                antList.push(new Ant(world));
+            }
+            // console.log("---->");
+            for(var i=0;i<antList.length;i++){
+                antList[i].move();
+            }
+            isRun=false;
         }
-        // console.log("---->");
-        for(var i=0;i<antList.length;i++){
-            antList[i].move();
-        }
+
+        var delay=parseInt(document.getElementById("speed").value);
         setTimeout(function(){
             _run();
-        },800);
+        },delay);
     }
     _run();
 

@@ -2,11 +2,30 @@ body{
     margin: 0px;
     padding: 0px;
     background-color: #16a085;
+    position: relative;
 }
 #gridBg{
     position: relative;
     left: 0px;
     top:0px;
+}
+.normal{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 100;
+}
+.food{
+    background-color: #abc123;
+}
+.home{
+    background-color: #407D94;
+}
+.barrier{
+    background-color: #cccccc;
+}
+.pheromone{
+    background-color: #264863;
 }
 .ant{
     position: absolute;
@@ -15,16 +34,111 @@ body{
     background-color: #fff;
     -webkit-transition: all 1s linear;
     transition: all 1s linear;
+    border-radius: 50%;
+    z-index: 110;
 }
-.food{
+#selectPlane{
     position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top:0px;
+    display: none;
+    z-index: 200;
+}
+#selectPlane #innerSelectPlane{
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    -webkit-border-radius: 10%;
+    border-radius: 10%;
+    overflow: hidden;
+
+}
+
+#selectPlane #innerSelectPlane .opacityBg{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top:0px;
+    background-color: #000;
+
+    -webkit-opacity: 0.5;
+    opacity: 0.5;
+
+}
+#selectPlane #innerSelectPlane .content{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top:5px;
+}
+#selectPlane #innerSelectPlane .content .select{
     width: 20px;
     height: 20px;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+
+}
+.green{
     background-color: #abc123;
 }
-.home{
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: #407D94;
+.scaleOutAnim{
+    -webkit-animation: scaleOut 0.8s ease;
+    animation: scaleOut 0.8s ease;
+}
+@-webkit-keyframes scaleOut
+{
+    0%{
+        -webkit-transform: scale(0);
+    }
+    /*90%{
+        -webkit-transform: scale(1.2);
+    }*/
+    100%{
+        -webkit-transform: scale(1);
+    }
+}
+@keyframes scaleOut
+{
+    0%{
+        transform: scale(0);
+    }
+    /*90%{
+        transform: scale(1.2);
+    }*/
+    100%{
+        transform: scale(1);
+    }
+}
+.scaleInAnim{
+    -webkit-animation: scaleIn 0.8s ease;
+    animation: scaleIn 0.8s ease;
+}
+@-webkit-keyframes scaleIn
+{
+    0%{
+        -webkit-transform: scale(1);
+    }
+    /*90%{
+        -webkit-transform: scale(1.2);
+    }*/
+    100%{
+        -webkit-transform: scale(0);
+    }
+}
+@keyframes scaleIn
+{
+    0%{
+        transform: scale(1);
+    }
+    /*90%{
+        transform: scale(1.2);
+    }*/
+    100%{
+        transform: scale(0);
+    }
 }
