@@ -1,7 +1,7 @@
 ## 简单蚁群算法实验模拟
 
-+ [文章地址](http://lab.breezedust.com/aco/)
-+ [Demo](lab.breezedust.com/aco/)
++ [文章地址](http://breezedust.com/2016/07/10/zi-hua-yi-qun-suan-fa-jian-dan-mo-ni-shi-li/)
++ [Demo](http://lab.breezedust.com/aco/)
 
 ### 使用
 
