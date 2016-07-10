@@ -12,7 +12,6 @@ var Ant=require("./entity/Ant.js");
 var World=require("./entity/World.js");
 var Position=require("./entity/Position.js");
 
-
 (function() {
     function initGridBg() {
         var canvas = document.getElementById('gridBg');
@@ -37,7 +36,7 @@ var Position=require("./entity/Position.js");
             if(!isRun){
                 isRun=true;
                 world.volatitlePheromone();
-                if(antList.length<50){
+                if(antList.length<World.ANT_NUMBER){
                     antList.push(new Ant(world));
                 }
                 // console.log("---->");

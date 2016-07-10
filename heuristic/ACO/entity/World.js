@@ -24,7 +24,9 @@ function World(width,height,distance){
 }
 // 静态变量
 World.BASE_PHEROMONE=1;
-World.CHANGE_MAX_VALUE=0.02;
+World.CHANGE_MAX_VALUE=0.02; // 突变概率
+World.ANT_NUMBER=50; // 蚂蚁数量
+
 
 
 // 可调参数

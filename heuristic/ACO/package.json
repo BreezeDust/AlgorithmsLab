@@ -4,6 +4,7 @@
   "description": "",
   "main": "aco.js",
   "scripts": {
+     "start": "webpack-dev-server --inline --hot --quiet",
      "dev": "webpack-dev-server --inline --hot --quiet --host 192.168.31.110",
      "build": "webpack -p",
      "test": "mocha"
