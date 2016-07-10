@@ -27,10 +27,6 @@ var Position=require("./entity/Position.js");
             caption: false
         };
         new Grid(opts).draw(ctx);
-        // ctx.fillStyle="#FF0000";
-        // ctx.fillRect(20*1,20*10,20,20);
-
-
     }
     function start(){
         var world=new World(window.innerWidth,window.innerHeight,20);
@@ -59,9 +55,9 @@ var Position=require("./entity/Position.js");
         _run();
     }
     initGridBg();
+    start();
     $("#start").click(function(){
         $("#welcome").hide();
-        start();
     });
 
 })();
