@@ -9,6 +9,7 @@ body{
     left: 0px;
     top:0px;
 }
+
 .normal{
     position: absolute;
     width: 20px;
@@ -22,7 +23,7 @@ body{
     background-color: #407D94;
 }
 .barrier{
-    background-color: #cccccc;
+    background-color: #637342;
 }
 .pheromone{
     background-color: #264863;
@@ -50,8 +51,8 @@ body{
     position: absolute;
     width: 60px;
     height: 30px;
-    -webkit-border-radius: 10%;
-    border-radius: 10%;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     overflow: hidden;
 
 }
@@ -83,12 +84,114 @@ body{
     margin-right: 5px;
 
 }
+#welcome{
+    position: absolute;
+    left: 0px;
+    top:0px;
+    width: 100%;
+    height: 100%;
+    z-index: 300;
+}
+#welcome .opacityBg{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top:0px;
+    background-color: #000;
+
+    -webkit-opacity: 0.6;
+    opacity: 0.55;
+}
+#welcome .vertical{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top:0px;
+    display: table;
+}
+#welcome .content{
+    position: relative;
+    width: 100%;
+    display: table-cell;
+    vertical-align: middle;
+    top:-30px;
+}
+#welcome .content h1{
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+}
+#welcome .author{
+    position: relative;
+    width: 125px;
+    margin: auto;
+    margin-top: 25px;
+}
+#welcome .author img{
+    max-width: 32px;
+    max-height: 32px;
+    margin-left: 20px;
+    -webkit-transition: all 0.6s linear;
+    transition: all 0.6s linear;
+}
+#welcome .author img:hover{
+    -webkit-opacity: 0.5;
+    opacity: 0.5;
+}
+#welcome .tip{
+    position: relative;
+    margin: auto;
+    margin-top: 9%;
+}
+#welcome .tip h2{
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color:rgba(255,255,255,0.8);
+}
+#welcome .tip .block{
+    position: relative;
+    width:101px;
+    margin: auto;
+
+}
+#welcome .outSelect{
+    position: relative;
+    float: left;
+    margin-left: 20px;
+}
+#welcome .outSelect h2{
+    font-size: 12px;
+    color:rgba(255,255,255,0.8);
+}
+#welcome .select{
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin: auto;
+}
+
+
+#welcome .content .btn{
+    position: relative;
+    margin: auto;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    background-color: #16a085;
+    color: #fff;
+    text-align: center;
+    margin-top: 7%;
+}
 .green{
     background-color: #abc123;
 }
 .scaleOutAnim{
-    -webkit-animation: scaleOut 0.8s ease;
-    animation: scaleOut 0.8s ease;
+    -webkit-animation: scaleOut 0.4s ease;
+    animation: scaleOut 0.4s ease;
 }
 @-webkit-keyframes scaleOut
 {
@@ -112,33 +215,5 @@ body{
     }*/
     100%{
         transform: scale(1);
-    }
-}
-.scaleInAnim{
-    -webkit-animation: scaleIn 0.8s ease;
-    animation: scaleIn 0.8s ease;
-}
-@-webkit-keyframes scaleIn
-{
-    0%{
-        -webkit-transform: scale(1);
-    }
-    /*90%{
-        -webkit-transform: scale(1.2);
-    }*/
-    100%{
-        -webkit-transform: scale(0);
-    }
-}
-@keyframes scaleIn
-{
-    0%{
-        transform: scale(1);
-    }
-    /*90%{
-        transform: scale(1.2);
-    }*/
-    100%{
-        transform: scale(0);
     }
 }

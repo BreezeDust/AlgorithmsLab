@@ -3,7 +3,7 @@
 * @Date:   2016-07-04
 * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-09
+* @Last modified time: 2016-07-10
 */
 
 var World=require("./World.js");
@@ -35,14 +35,10 @@ Ant.CHECK_FOOD=103;
 Ant.CHECK_HOME=104;
 
 
-// 可调参数
-Ant.CHANGE_MAX_VALUE=0.02;
 
-
-Ant.lunpandu = function() { //轮盘赌
+Ant.lunpandu = function(whell) { //轮盘赌
     var nowP = Math.random();
     var m = 0;
-    var whell = [0.4, 0.2, Ant.CHANGE_MAX_VALUE, 0.4-Ant.CHANGE_MAX_VALUE];
     var point = 0;
     for (var i = 0; i < whell.length; i++) {
         m += whell[i];
@@ -51,7 +47,7 @@ Ant.lunpandu = function() { //轮盘赌
             break;
         }
     }
-    return whell[point];
+    return point;
 }
 Ant.prototype._init=function(){
 
@@ -86,27 +82,21 @@ Ant.prototype._getP=function(position,status){
     var value=0;
     if(status==Ant.STATUS_FIND_FOOD){
         if(this.homePosition!=null){
-            var manhattan=Math.abs(position.x-this.homePosition.x)+Math.abs(position.y-this.homePosition.y);
-            // manhattan=Math.sqrt(Math.pow(position.x-this.homePosition.x,2)+Math.pow(position.y-this.homePosition.y,2));
-            value=World.BASE_HOME_PHEROMONE/this.step;
+            // var manhattan=Math.abs(position.x-this.homePosition.x)+Math.abs(position.y-this.homePosition.y);
+            value=World.baseHomePheromone/this.step;
 
         }
     }
     else if(status===Ant.STATUS_CARRY_FOOD){
         if(this.foodPosition!=null){
-            var manhattan=Math.abs(position.x-this.foodPosition.x)+Math.abs(position.y-this.foodPosition.y);
-            // manhattan=Math.sqrt(Math.pow(position.x-this.foodPosition.x,2)+Math.pow(position.y-this.foodPosition.y,2));
-            value=World.BASE_FOOD_PHEROMONE/this.step;
+            // var manhattan=Math.abs(position.x-this.foodPosition.x)+Math.abs(position.y-this.foodPosition.y);
+            value=World.baseFoodPheromone/this.step;
         }
     }
     return value<=0.1? 0:value;
 };
 Ant.prototype._leavePheromone=function(position){
     position.leavePheromone(this._getP(position,this.status),this.status);
-    //
-    // position.leavePheromone(this._getP(position,Ant.STATUS_FIND_FOOD),Ant.STATUS_FIND_FOOD);
-    // position.leavePheromone(this._getP(position,Ant.STATUS_CARRY_FOOD),Ant.STATUS_CARRY_FOOD);
-
 }
 Ant.prototype._check=function(position){
     if(position==null){
@@ -136,7 +126,7 @@ Ant.prototype.move=function(){
     var newPosition=this._findPosition(lastPosition);
 
     // 没有信息素时，回家
-    if(this.status==Ant.STATUS_FIND_FOOD && this._getP(lastPosition,this.status)<=World.MIN_PHEROMONE){
+    if(this._getP(lastPosition,this.status)<=World.minPheromone){
         this._init();
         return;
     }
@@ -156,30 +146,31 @@ Ant.prototype.move=function(){
         this.dom.addClass("green");
     }
     else if(check==Ant.CHECK_HOME){
-        if(this.status==Ant.STATUS_FIND_FOOD){
-            this._move(newPosition);
-        }
-        else if(this.status==Ant.STATUS_CARRY_FOOD){
-            this._init();
-        }
+        this._init();
+        // if(this.status==Ant.STATUS_FIND_FOOD){
+        //     this._move(newPosition);
+        // }
+        // else if(this.status==Ant.STATUS_CARRY_FOOD){
+        //     this._init();
+        // }
     }
 };
 
 Ant.prototype._findPosition=function(lastPosition,isStart){
-    var change=Ant.lunpandu();
-    // TODO  debgu
-    // change=1;
+    var changeWhell = [0.4, 0.2, World.CHANGE_MAX_VALUE, 0.4-World.CHANGE_MAX_VALUE];
+    var change=changeWhell[Ant.lunpandu(changeWhell)];
     // 探测信息素
     var findStatus=Ant.STATUS_CARRY_FOOD;
     if(this.status==Ant.STATUS_CARRY_FOOD){
         findStatus=Ant.STATUS_FIND_FOOD;
     }
-    if(this.status==Ant.STATUS_FIND_FOOD && change<=Ant.CHANGE_MAX_VALUE){
+    if(this.status==Ant.STATUS_FIND_FOOD && change<=World.CHANGE_MAX_VALUE){
         // console.log("===>","change",change);
         this.dp=Math.floor(Math.random()*Direction.M.length);
     }
     else{
         var pheromoneList=[];
+        var allPheromone=0;
         for (var j = 1; j <= 1; j++) {
             for (var i = 0; i < Direction.M.length; i++) {
                 var checkP = lastPosition.move(Direction.M[i], this._word.map, j);
@@ -188,9 +179,11 @@ Ant.prototype._findPosition=function(lastPosition,isStart){
                     if (this.status == this.lastStatus) {
                         // 防止小幅度震荡
                         if (this._getCheckedIndex(checkP) < 0) {
+                            allPheromone+=checkP.getP(findStatus);
                             pheromoneList.push(checkP);
                         }
                     } else {
+                        allPheromone+=checkP.getP(findStatus);
                         pheromoneList.push(checkP);
                     }
 
@@ -199,35 +192,32 @@ Ant.prototype._findPosition=function(lastPosition,isStart){
 
         }
         this.lastStatus=this.status;
-
-        pheromoneList.sort(function(a,b){
-            return b.getP(findStatus)-a.getP(findStatus);
-        });
-        if(pheromoneList.length>0 && pheromoneList[0].getP(findStatus)>World.MIN_PHEROMONE){
-            // console.log("选择-->",pheromoneList[0]);
-            var newDp=Ant.getNewDirection(lastPosition,pheromoneList[0]);
-            if(newDp!=-1){
-                this.dp=newDp;
+        if(allPheromone>0){
+            var whell=[];
+            for(var k=0;k<pheromoneList.length;k++){
+                whell[k]=pheromoneList[k].getP(findStatus)/allPheromone;
             }
-            return pheromoneList[0];
-        }
-
-        // 如果没有进行信息素选择
-        if(isStart){
-            this.dp=Math.floor(Math.random()*Direction.M.length);
-            if(Ant.testN==0){
-                Ant.testN++;
-                this.dp=Direction.getDP(Direction.U);
+            var selectIndex=Ant.lunpandu(whell);
+            console.log(whell,allPheromone);
+            console.log("==>",selectIndex);
+            if(selectIndex>=0 && selectIndex<pheromoneList.length){
+                var newDp=Ant.getNewDirection(lastPosition,pheromoneList[selectIndex]);
+                if(newDp!=-1){
+                    this.dp=newDp;
+                }
+                return pheromoneList[selectIndex];
             }
         }
-        // if(this.status==Ant.STATUS_CARRY_FOOD){
-        //     // 向家的方向走
-        //     var dp=Ant.getNewDirection(lastPosition,this.homePosition);
-        //     if(dp!=-1){
-        //         this.dp=dp;
-        //     }
-        // }
-        // 否则惯性运动
+        else{
+            if(isStart){
+                this.dp=Math.floor(Math.random()*Direction.M.length);
+                if(Ant.testN==0){
+                    Ant.testN++;
+                    console.log("===");
+                    this.dp=Direction.getDP(Direction.U);
+                }
+            }
+        }
     }
 
     return lastPosition.move(Direction.M[this.dp],this._word.map);

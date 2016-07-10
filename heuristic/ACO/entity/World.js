@@ -3,7 +3,7 @@
 * @Date:   2016-07-04
 * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-09
+* @Last modified time: 2016-07-10
 */
 
 
@@ -22,27 +22,37 @@ function World(width,height,distance){
     this._init();
 
 }
-World.VOLATILE=0;
-World.BASE_HOME_PHEROMONE=0;
-World.BASE_FOOD_PHEROMONE=0;
-
-World.MIN_PHEROMONE=0;
-World.BASE_PHEROMONE=0.1;
+// 静态变量
+World.BASE_PHEROMONE=1;
+World.CHANGE_MAX_VALUE=0.02;
 
 
+// 可调参数
+World.volatile=0; // 挥发参数
+World.baseHomePheromone=0; // 家相关信息素起始值
+World.baseFoodPheromone=0; // 食物相关信息素起始值
+
+World.minPheromone=0; // 最小信息素值
+
+World.maxPheromoneValue=0; // 最大信息素值
+World.showPheromoneType=0; // 显示那种信息素的分布
 
 World.prototype._init=function(){
-    var maxLength=this.xl*this.xl +this.yl*this.yl;
-    World.BASE_HOME_PHEROMONE=maxLength*World.BASE_PHEROMONE;
-    World.BASE_FOOD_PHEROMONE=maxLength*World.BASE_PHEROMONE;
 
-    World.MIN_PHEROMONE=World.BASE_PHEROMONE;
-    World.VOLATILE=World.BASE_PHEROMONE*5;
+    var maxLength=parseInt(Math.sqrt(this.xl*this.xl +this.yl*this.yl));
+    World.baseHomePheromone=maxLength*World.BASE_PHEROMONE;
+    World.baseFoodPheromone=maxLength*World.BASE_PHEROMONE;
 
-    console.log("World.VOLATILE",World.VOLATILE);
-    console.log("World.BASE_HOME_PHEROMONE",World.BASE_HOME_PHEROMONE);
-    console.log("World.BASE_FOOD_PHEROMONE",World.BASE_FOOD_PHEROMONE);
-    console.log("World.MIN_PHEROMONE",World.MIN_PHEROMONE);
+    World.minPheromone=World.BASE_PHEROMONE;
+    World.volatile=World.BASE_PHEROMONE/2;
+    World.maxPheromoneValue=World.baseHomePheromone;
+    World.showPheromoneType=Position.P_TYPE_HOME;
+
+    console.log("World.volatile",World.volatile);
+    console.log("World.baseHomePheromone",World.baseHomePheromone);
+    console.log("World.baseFoodPheromone",World.baseFoodPheromone);
+    console.log("World.minPheromone",World.minPheromone);
+    console.log("World.minPheromone",World.showPheromoneType);
 
 
     for(var i=0;i<this.xl;i++){
@@ -52,10 +62,10 @@ World.prototype._init=function(){
         }
     }
 
-    var foodX=2;
-    var foodY=5;
-    this.map[foodX][foodY]=new Position(this,foodX,foodY,Number.MAX_VALUE,0,Position.TYPE_FOOD);
-    this.map[foodX][foodY].showFood();
+    // var foodX=2;
+    // var foodY=5;
+    // this.map[foodX][foodY]=new Position(this,foodX,foodY,Number.MAX_VALUE,0,Position.TYPE_FOOD);
+    // this.map[foodX][foodY].showFood();
 
     // foodX=4;
     // foodY=12;
@@ -64,7 +74,7 @@ World.prototype._init=function(){
 
     // foodX=parseInt(this.xl/2);
     // foodY=0;
-    // this.map[foodX][foodY]=new Position(foodX,foodY,Number.MAX_VALUE,0,Position.TYPE_FOOD);
+    // this.map[foodX][foodY]=new Position(this,foodX,foodY,Number.MAX_VALUE,0,Position.TYPE_FOOD);
     // this.map[foodX][foodY].showFood();
 
     var homeX=parseInt(this.xl/2);
@@ -136,11 +146,17 @@ World.prototype._getCheckedIndex=function(position){
     return -1;
 };
 World.prototype.volatitlePheromone=function(){
+    var max=0;
     for(var i=0;i<this.checkList.length;i++){
         var position=this.map[this.checkList[i].x][this.checkList[i].y];
-        position.volatitlePheromone(World.VOLATILE);
-        position.showPheromone(World.BASE_HOME_PHEROMONE);
+        if(position.type==Position.TYPE_NORMAL && position.getP(World.showPheromoneType)>max){
+            max=position.getP(World.showPheromoneType);
+        }
+        position.volatitlePheromone(World.volatile);
+        position.showPheromone(World.maxPheromoneValue,World.showPheromoneType);
     }
+    // console.log("====>",max);
+    // World.maxPheromoneValue=max;
 }
 World.prototype.getPosition=function(x,y){
     return this.map[x][y];

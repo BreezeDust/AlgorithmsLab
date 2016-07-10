@@ -3,7 +3,7 @@
 * @Date:   2016-07-04
 * @Email:  breezedust.com@gmail.com
 * @Last modified by:   BreezeDust
-* @Last modified time: 2016-07-09
+* @Last modified time: 2016-07-10
 */
 
 
@@ -36,7 +36,6 @@ Position.TYPE_NORMAL=0;
 Position.TYPE_BARRIER=-1;
 Position.P_TYPE_FOOD=1001;
 Position.P_TYPE_HOME=1002;
-
 Position.prototype._init=function(){
     this.dom=$('<div></div>');
     this.dom.css({
@@ -75,16 +74,22 @@ Position.prototype.volatitlePheromone=function(volatite){
 
 }
 Position.prototype._volatitlePheromone=function(volatite,pType){
-    if(this.pheromone[pType]-volatite<0){
-        this.pheromone[pType]=0;
+    if(this.type==Position.TYPE_NORMAL){
+        if(this.pheromone[pType]-volatite<0){
+            this.pheromone[pType]=0;
+        }
+        else{
+            this.pheromone[pType]-=volatite;
+        }
+        return this.pheromone[pType];
     }
-    else{
-        this.pheromone[pType]-=volatite;
-    }
-    return this.pheromone[pType];
+    return 0;
+
 }
 Position.prototype.leavePheromone=function(fp,pType){
-    this.pheromone[pType]+=fp;
+    if(this.type==Position.TYPE_NORMAL){
+        this.pheromone[pType]+=fp;
+    }
 }
 Position.prototype.changeType=function(type){
     if(this.type==Position.TYPE_BARRIER){
@@ -127,9 +132,8 @@ Position.prototype.showHome=function(){
         this.dom.addClass("home");
     }
 }
-Position.prototype.showPheromone=function(max){
-    var _SHOW_TYPE=Position.P_TYPE_FOOD;
-    var a=(max-this.pheromone[_SHOW_TYPE])/max;
+Position.prototype.showPheromone=function(max,showType){
+    var a=(max-this.pheromone[showType])/max;
     if(this.type==Position.TYPE_NORMAL){
         var r=38;
         var g=72;
